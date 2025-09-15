@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 10, "column": 0}, "map": {"version":3,"sources":["file:///home/daniel/Desktop/projects/Intern-Job/src/components/themeProvider.tsx"],"sourcesContent":["// components/theme-provider.tsx\n\"use client\";\nimport { ThemeProvider } from \"next-themes\";\nimport { ReactNode } from \"react\";\n\ninterface ProvidersProps {\n    children: ReactNode;\n}\n\nexport function Providers({ children }: ProvidersProps) {\n    return (\n        <ThemeProvider attribute=\"class\" defaultTheme=\"light\" enableSystem>\n            {children}\n        </ThemeProvider>\n    );\n}\n"],"names":[],"mappings":"AAAA,gCAAgC;;;;;;AAEhC;AADA;;;AAQO,SAAS,UAAU,EAAE,QAAQ,EAAkB;IAClD,qBACI,8OAAC,iKAAa;QAAC,WAAU;QAAQ,cAAa;QAAQ,YAAY;kBAC7D;;;;;;AAGb","debugId":null}}]
-}

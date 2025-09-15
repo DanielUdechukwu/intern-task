@@ -3,13 +3,12 @@
  */
 
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 // import { useDarkMode } from "@/hooks/useDarkMode";
 
 export default function Navigation() {
     const [activeIndex, setActiveIndex] = useState(0);
-    const [light, setLight] = useState(false);
     // const { isDark, toggleDarkMode, mounted } = useDarkMode();
 
     const navItems = [
@@ -294,17 +293,13 @@ export default function Navigation() {
         const currentTheme = html.getAttribute("data-theme");
 
         if (currentTheme === "dark") {
-            html.removeAttribute("data-theme"); // fallback to light
+            html.removeAttribute("data-theme");
             console.log("Light");
         } else {
             html.setAttribute("data-theme", "dark");
             console.log("Dark");
         }
     };
-
-    useEffect(() => {
-        setLight(true);
-    }, []);
 
     return (
         <nav className="relative flex pt-[.9rem] items-center w-[95%] mx-auto my-[.4rem]">
@@ -315,6 +310,15 @@ export default function Navigation() {
                     width={24}
                     height={24}
                     alt="Company Logo"
+                    className="block dark:hidden"
+                />
+
+                <Image
+                    src="/icons/logo-light.svg"
+                    width={24}
+                    height={24}
+                    alt="Company Logo"
+                    className="hidden dark:block"
                 />
             </div>
 
