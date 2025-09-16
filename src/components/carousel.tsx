@@ -1,5 +1,5 @@
 /**
- * Carousel Section
+ * Responsive Carousel Section
  */
 
 "use client";
@@ -17,6 +17,7 @@ interface CarouselItem {
 
 export default function Carousel() {
     const [activeIndex, setActiveIndex] = useState(0);
+    const [isMobile, setIsMobile] = useState(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const carouselItems: CarouselItem[] = [
@@ -67,16 +68,29 @@ export default function Carousel() {
         },
     ];
 
+    // Check if mobile on mount and resize
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 1024);
+        };
+
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+
+        return () => window.removeEventListener("resize", checkMobile);
+    }, []);
+
     const scrollToCard = (index: number) => {
         if (scrollContainerRef.current) {
             const container = scrollContainerRef.current;
-
             const firstChild =
                 container.firstElementChild as HTMLElement | null;
-            if (!firstChild) return; // prevent null access
+            if (!firstChild) return;
 
-            const cardWidth = firstChild.offsetWidth + 56;
-            const scrollLeft = index * cardWidth;
+            // Dynamic card width calculation based on screen size
+            const cardWidth = firstChild.offsetWidth;
+            const gap = isMobile ? 16 : 56; // 1rem mobile, 3.5rem desktop
+            const scrollLeft = index * (cardWidth + gap);
 
             container.scrollTo({
                 left: scrollLeft,
@@ -88,12 +102,12 @@ export default function Carousel() {
     const handleScroll = useCallback(() => {
         if (scrollContainerRef.current) {
             const container = scrollContainerRef.current;
-
             const firstChild =
                 container.firstElementChild as HTMLElement | null;
             if (!firstChild) return;
 
-            const cardWidth = firstChild.clientWidth + 56;
+            const cardWidth = firstChild.clientWidth;
+            const gap = isMobile ? 16 : 56;
             const scrollLeft = container.scrollLeft;
             const maxScrollLeft = container.scrollWidth - container.clientWidth;
 
@@ -107,8 +121,8 @@ export default function Carousel() {
             const newIndex = Math.max(
                 0,
                 Math.min(
-                    carouselItems.length - 2,
-                    Math.round(scrollLeft / cardWidth)
+                    carouselItems.length - 1,
+                    Math.round(scrollLeft / (cardWidth + gap))
                 )
             );
 
@@ -116,7 +130,7 @@ export default function Carousel() {
                 setActiveIndex(newIndex);
             }
         }
-    }, [activeIndex, carouselItems.length]);
+    }, [activeIndex, carouselItems.length, isMobile]);
 
     const goToPrevious = () => {
         if (activeIndex > 0) {
@@ -148,10 +162,10 @@ export default function Carousel() {
     }, [handleScroll]);
 
     return (
-        <section className="mt-[7rem] ml-[3rem]">
+        <section className="mt-8 sm:mt-16 lg:mt-[7rem] px-4 sm:px-6 lg:ml-[3rem] lg:px-0">
             <div
                 ref={scrollContainerRef}
-                className="w-full overflow-x-scroll scrollbar-hide flex items-center pb-[1rem] scroll-smooth"
+                className="w-full overflow-x-scroll scrollbar-hide flex items-center pb-4 lg:pb-[1rem] scroll-smooth gap-4 lg:gap-[3.5rem]"
                 style={{
                     scrollSnapType: "x mandatory",
                     scrollBehavior: "smooth",
@@ -164,7 +178,7 @@ export default function Carousel() {
                     return (
                         <div
                             key={index}
-                            className="min-w-[70rem] relative mr-[3.5rem] h-[35rem] rounded-3xl flex-shrink-0"
+                            className="w-full sm:min-w-[75vw] md:min-w-[65vw] lg:min-w-[70rem] relative h-[50vh] sm:h-[60vh] lg:h-[35rem] rounded-2xl lg:rounded-3xl flex-shrink-0"
                             style={{ scrollSnapAlign: "start" }}
                         >
                             <Image
@@ -172,31 +186,31 @@ export default function Carousel() {
                                 width={1024}
                                 height={1024}
                                 alt={alt}
-                                className="w-full object-cover rounded-3xl h-full"
+                                className="w-full object-cover rounded-2xl lg:rounded-3xl h-full"
                             />
 
                             {/* Dark overlay */}
-                            <div className="absolute inset-0 bg-black/50 rounded-3xl" />
+                            <div className="absolute inset-0 bg-black/50 rounded-2xl lg:rounded-3xl" />
 
                             {/* Model Descriptor */}
                             <div className="uppercase">
-                                <p className="font-bold text-[.9rem] text-white/80 absolute top-[2rem] left-[2.5rem]">
+                                <p className="font-bold text-xs sm:text-sm lg:text-[.9rem] text-white/80 absolute top-4 sm:top-6 lg:top-[2rem] left-4 sm:left-6 lg:left-[2.5rem]">
                                     {badge}
                                 </p>
                             </div>
 
                             {/* Main Card Description */}
-                            <div className="absolute bottom-[2rem] text-white flex justify-between items-end w-full px-[2rem]">
-                                <div className="w-[35rem]">
-                                    <h3 className="font-bold text-[2rem]">
+                            <div className="absolute bottom-4 sm:bottom-6 lg:bottom-[2rem] text-white flex flex-col sm:flex-row justify-between items-start sm:items-end w-full px-4 sm:px-6 lg:px-[2rem] gap-4 sm:gap-6">
+                                <div className="w-full sm:w-[70%] lg:w-[35rem]">
+                                    <h3 className="font-bold text-xl sm:text-2xl lg:text-[2rem] mb-2 leading-tight">
                                         {title}
                                     </h3>
-                                    <p className="w-[95%] font-medium text-[1rem]">
+                                    <p className="text-sm sm:text-base lg:text-[1rem] font-medium text-white/90 leading-relaxed">
                                         {description}
                                     </p>
                                 </div>
 
-                                <button className="h-[3rem] min-w-[10rem] bg-white rounded-full text-black cursor-pointer font-medium">
+                                <button className="w-full sm:w-auto h-10 sm:h-12 lg:h-[3rem] min-w-[8rem] sm:min-w-[9rem] lg:min-w-[10rem] bg-white rounded-full text-black cursor-pointer font-medium text-sm sm:text-base hover:bg-gray-100 transition-colors duration-200 active:scale-95 flex-shrink-0">
                                     {cta}
                                 </button>
                             </div>
@@ -205,16 +219,18 @@ export default function Carousel() {
                 })}
             </div>
 
-            <div className="PAGINATION mx-[3rem] flex justify-between items-center">
-                <div></div>
+            {/* Pagination and Controls */}
+            <div className="flex justify-between items-center mt-6 lg:mt-0 px-4 sm:px-6 lg:mx-[3rem] lg:px-0">
+                {/* Empty div for spacing on desktop, hidden on mobile */}
+                <div className="hidden lg:block"></div>
 
                 {/* Dynamic Pagination Dots */}
-                <ul className="flex items-center gap-[.7rem]">
+                <ul className="flex items-center gap-2 lg:gap-[.7rem] order-2 lg:order-none">
                     {carouselItems.map((_, index) => (
                         <li
                             key={index}
                             onClick={() => handlePaginationClick(index)}
-                            className={`w-[.6rem] h-[.6rem] rounded-full cursor-pointer transition-all duration-300 ${
+                            className={`w-2 h-2 lg:w-[.6rem] lg:h-[.6rem] rounded-full cursor-pointer transition-all duration-300 ${
                                 activeIndex === index
                                     ? "bg-[#2e2e2e] dark:bg-white scale-125"
                                     : "bg-[#2e2e2e]/30 hover:bg-[#2e2e2e]/50 dark:bg-white/30 dark:hover:bg-white/50"
@@ -224,10 +240,11 @@ export default function Carousel() {
                 </ul>
 
                 {/* Navigation Buttons */}
-                <div className="flex items-center gap-[.3rem]">
+                <div className="flex items-center gap-2 lg:gap-[.3rem] order-1 lg:order-none">
                     <button
                         onClick={goToPrevious}
-                        className="w-[2rem] h-[2rem] rounded-full bg-[#2e2e2e]/30 hover:bg-[#2e2e2e]/50 flex items-center justify-center transition-all duration-200 active:scale-95"
+                        disabled={activeIndex === 0}
+                        className="w-8 h-8 lg:w-[2rem] lg:h-[2rem] rounded-full bg-[#2e2e2e]/30 hover:bg-[#2e2e2e]/50 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition-all duration-200 active:scale-95"
                         aria-label="Previous slide"
                     >
                         <svg
@@ -236,7 +253,7 @@ export default function Carousel() {
                             viewBox="0 0 16 16"
                             fill="currentColor"
                             xmlns="http://www.w3.org/2000/svg"
-                            className="rotate-90 w-[.8rem] text-[#202020] dark:text-white"
+                            className="rotate-90 w-3 h-3 lg:w-[.8rem] lg:h-[.8rem] text-[#202020] dark:text-white"
                         >
                             <path
                                 fillRule="evenodd"
@@ -249,7 +266,8 @@ export default function Carousel() {
 
                     <button
                         onClick={goToNext}
-                        className="w-[2rem] h-[2rem] rounded-full bg-[#2e2e2e]/30 hover:bg-[#2e2e2e]/50 flex items-center justify-center transition-all duration-200 active:scale-95"
+                        disabled={activeIndex === carouselItems.length - 1}
+                        className="w-8 h-8 lg:w-[2rem] lg:h-[2rem] rounded-full bg-[#2e2e2e]/30 hover:bg-[#2e2e2e]/50 disabled:opacity-30 disabled:cursor-not-allowed flex items-center justify-center transition-all duration-200 active:scale-95"
                         aria-label="Next slide"
                     >
                         <svg
@@ -258,7 +276,7 @@ export default function Carousel() {
                             viewBox="0 0 16 16"
                             fill="currentColor"
                             xmlns="http://www.w3.org/2000/svg"
-                            className="-rotate-90 w-[.8rem] text-[#202020] dark:text-white"
+                            className="-rotate-90 w-3 h-3 lg:w-[.8rem] lg:h-[.8rem] text-[#202020] dark:text-white"
                         >
                             <path
                                 fillRule="evenodd"

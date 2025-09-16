@@ -7,7 +7,7 @@ export default function Home() {
         <section className="min-h-screen">
             <Navigation />
             <Carousel />
-            <GenerateModels />
+            {/* <GenerateModels /> */}
         </section>
     );
 }
