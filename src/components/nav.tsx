@@ -1,15 +1,13 @@
 /**
- * Navigation Component
+ * Navigation Component with Mobile Hamburger Menu
  */
-
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-// import { useDarkMode } from "@/hooks/useDarkMode";
 
 export default function Navigation() {
     const [activeIndex, setActiveIndex] = useState(0);
-    // const { isDark, toggleDarkMode, mounted } = useDarkMode();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
     const navItems = [
         {
@@ -55,7 +53,6 @@ export default function Navigation() {
                         clipRule="evenodd"
                         d="M10.4763 9.85043C10.4763 10.8104 9.69763 11.589 8.73768 11.589C7.77772 11.589 7 10.8104 7 9.85043C7 8.89049 7.77772 8.11182 8.73768 8.11182C9.69763 8.11182 10.4754 8.88955 10.4763 9.84856V9.85043Z"
                     />
-
                     <rect
                         x="2.75"
                         y="3.86182"
@@ -65,7 +62,6 @@ export default function Navigation() {
                         fill="none"
                         strokeWidth="1.5"
                     />
-
                     <path
                         d="M15.758 13.1118C17.5271 13.1118 19.1544 14.6938 20 15.4766V19.1118H4C4 19.1118 5.29914 17.0464 6.6586 16.0349C8.01806 15.0235 9.56678 16.6015 11.2673 16.6015C12.9687 16.6015 13.9898 13.1118 15.758 13.1118Z"
                         strokeWidth="1.5"
@@ -291,7 +287,6 @@ export default function Navigation() {
     const toggleTheme = () => {
         const html = document.documentElement;
         const currentTheme = html.getAttribute("data-theme");
-
         if (currentTheme === "dark") {
             html.removeAttribute("data-theme");
             console.log("Light");
@@ -302,153 +297,368 @@ export default function Navigation() {
     };
 
     return (
-        <nav className="relative flex pt-[.9rem] items-center w-[95%] mx-auto my-[.4rem]">
-            {/* Left: Logo */}
-            <div className="flex-shrink-0">
-                <Image
-                    src="/icons/logo.svg"
-                    width={24}
-                    height={24}
-                    alt="Company Logo"
-                    className="block dark:hidden"
-                />
-
-                <Image
-                    src="/icons/logo-light.svg"
-                    width={24}
-                    height={24}
-                    alt="Company Logo"
-                    className="hidden dark:block"
-                />
-            </div>
-
-            {/* Center: Navigation */}
-            <ul className="absolute left-1/2 -translate-x-1/2 flex items-center bg-[#f5f5f5] dark:bg-[#202020] gap-1 px-2 rounded-2xl backdrop-blur-2xl py-[.4rem]">
-                {navItems.map((items, index) => (
-                    <li
-                        key={items.id}
-                        onClick={() => setActiveIndex(index)}
-                        className={`h-10 w-13 flex items-center group justify-center rounded-xl cursor-pointer transition ease-in-out duration-100 ${
-                            activeIndex === index
-                                ? "bg-white shadow-sm"
-                                : "hover:bg-[#e5e5e5]/10"
-                        }`}
-                    >
-                        {items.icon}
-                    </li>
-                ))}
-            </ul>
-
-            {/* Right: Actions */}
-            <div className="ml-auto flex justify-center items-center gap-[1rem]">
-                <div className="flex justify-center items-center gap-[.3rem] bg-[#f5f5f5] dark:bg-[#202020] px-2 py-2 rounded-xl">
-                    {/* <Image
-                        src="/icons/gallery2.svg"
-                        width={24}
-                        height={24}
-                        alt="dark mode toggle"
-                        className="w-[1.2rem]"
-                    /> */}
-
-                    <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="inset-0 w-[1.2rem] m-auto text-black dark:text-white"
-                    >
-                        <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M10.4763 9.85043C10.4763 10.8104 9.69763 11.589 8.73768 11.589C7.77772 11.589 7 10.8104 7 9.85043C7 8.89049 7.77772 8.11182 8.73768 8.11182C9.69763 8.11182 10.4754 8.88955 10.4763 9.84856V9.85043Z"
-                            fill="currentColor"
-                        />
-                        <rect
-                            x="2.75"
-                            y="3.86182"
-                            width="18.5"
-                            height="16.5"
-                            rx="3.25"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                        />
-                        <path
-                            d="M15.758 13.1118C17.5271 13.1118 19.1544 14.6938 20 15.4766V19.1118H4C4 19.1118 5.29914 17.0464 6.6586 16.0349C8.01806 15.0235 9.56678 16.6015 11.2673 16.6015C12.9687 16.6015 13.9898 13.1118 15.758 13.1118Z"
-                            fill="currentColor"
-                            stroke="currentColor"
-                            strokeWidth="1.5"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                        />
-                    </svg>
-
-                    <p className="text-[.9rem] font-medium text-[#202020] dark:text-white">
-                        Gallery
-                    </p>
-                </div>
-
-                <div className="flex justify-center items-center gap-[.3rem] bg-[#f8f8f8] dark:bg-[#202020] px-2 py-2 rounded-xl">
-                    <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-[1.2rem] text-[#202020] dark:text-white"
-                    >
-                        <path
-                            d="M8 1C5.23858 1 3 3.23858 3 6V7H4C4.55228 7 5 7.44772 5 8V11C5 11.5523 4.55228 12 4 12H3C2.44772 12 2 11.5523 2 11V6C2 2.68629 4.68629 0 8 0C11.3137 0 14 2.68629 14 6V12C14 13.3807 12.8807 14.5 11.5 14.5H9.36622C9.19331 14.7989 8.87014 15 8.5 15H7.5C6.94772 15 6.5 14.5523 6.5 14C6.5 13.4477 6.94772 13 7.5 13H8.5C8.87014 13 9.19331 13.2011 9.36622 13.5H11.5C12.3284 13.5 13 12.8284 13 12H12C11.4477 12 11 11.5523 11 11V8C11 7.44772 11.4477 7 12 7H13V6C13 3.23858 10.7614 1 8 1Z"
-                            fill="currentColor"
-                        />
-                    </svg>
-
-                    <p className="text-[.9rem] font-medium text-[#202020] dark:text-white">
-                        Support
-                    </p>
-                </div>
-
-                <div className="flex justify-center items-center gap-[.3rem] dark:bg-[#202020] bg-[#f8f8f8] px-2 py-2 rounded-xl">
-                    <svg
-                        width="16"
-                        height="16"
-                        viewBox="0 0 16 16"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="w-[1.2rem] text-[#202020] dark:text-white"
-                    >
-                        <path
-                            d="M8 16C9.10457 16 10 15.1046 10 14H6C6 15.1046 6.89543 16 8 16Z"
-                            fill="currentColor"
-                        />
-                        <path
-                            d="M8.99516 1.09903C8.99836 1.06646 9 1.03342 9 1C9 0.447715 8.55228 0 8 0C7.44772 0 7 0.447715 7 1C7 1.03342 7.00164 1.06646 7.00484 1.09904C4.7202 1.56045 3.00002 3.57934 3.00002 6C3.00002 7.0976 2.5 12 1 13H15C13.5 12 13 7.0976 13 6C13 3.57932 11.2798 1.56042 8.99516 1.09903Z"
-                            fill="currentColor"
-                        />
-                    </svg>
-                </div>
-
-                <div className="flex justify-center items-center gap-[.3rem] bg-[#f8f8f8] dark:bg-[#202020] px-2 py-2 rounded-xl">
+        <>
+            <nav className="relative flex pt-[.9rem] items-center w-[95%] mx-auto my-[.4rem]">
+                {/* Left: Logo */}
+                <div className="flex-shrink-0">
                     <Image
-                        src="/icons/cresent.svg"
+                        src="/icons/logo.svg"
                         width={24}
                         height={24}
-                        alt="dark mode toggle"
-                        className="cursor-pointer block dark:hidden w-[1.2rem]"
-                        onClick={toggleTheme}
+                        alt="Company Logo"
+                        className="block dark:hidden"
                     />
-
                     <Image
-                        src="/icons/light.svg"
+                        src="/icons/logo-light.svg"
                         width={24}
                         height={24}
-                        alt="light mode toggle"
-                        className="cursor-pointer hidden dark:block w-[1.2rem]"
-                        onClick={toggleTheme}
+                        alt="Company Logo"
+                        className="hidden dark:block"
                     />
                 </div>
-                <div></div>
+
+                {/* Center: Desktop Navigation - Hidden on mobile */}
+                <ul className="absolute left-1/2 -translate-x-1/2 hidden lg:flex items-center bg-[#f5f5f5] dark:bg-[#202020] gap-1 px-2 rounded-2xl backdrop-blur-2xl py-[.4rem]">
+                    {navItems.map((items, index) => (
+                        <li
+                            key={items.id}
+                            onClick={() => setActiveIndex(index)}
+                            className={`h-10 w-13 flex items-center group justify-center rounded-xl cursor-pointer transition ease-in-out duration-100 ${
+                                activeIndex === index
+                                    ? "bg-white shadow-sm"
+                                    : "hover:bg-[#e5e5e5]/10"
+                            }`}
+                        >
+                            {items.icon}
+                        </li>
+                    ))}
+                </ul>
+
+                {/* Right: Actions - Hidden on mobile */}
+                <div className="ml-auto hidden lg:flex justify-center items-center gap-[1rem]">
+                    <div className="flex justify-center items-center gap-[.3rem] bg-[#f5f5f5] dark:bg-[#202020] px-2 py-2 rounded-xl">
+                        <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="inset-0 w-[1.2rem] m-auto text-black dark:text-white"
+                        >
+                            <path
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M10.4763 9.85043C10.4763 10.8104 9.69763 11.589 8.73768 11.589C7.77772 11.589 7 10.8104 7 9.85043C7 8.89049 7.77772 8.11182 8.73768 8.11182C9.69763 8.11182 10.4754 8.88955 10.4763 9.84856V9.85043Z"
+                                fill="currentColor"
+                            />
+                            <rect
+                                x="2.75"
+                                y="3.86182"
+                                width="18.5"
+                                height="16.5"
+                                rx="3.25"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                            />
+                            <path
+                                d="M15.758 13.1118C17.5271 13.1118 19.1544 14.6938 20 15.4766V19.1118H4C4 19.1118 5.29914 17.0464 6.6586 16.0349C8.01806 15.0235 9.56678 16.6015 11.2673 16.6015C12.9687 16.6015 13.9898 13.1118 15.758 13.1118Z"
+                                fill="currentColor"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                            />
+                        </svg>
+                        <p className="text-[.9rem] font-medium text-[#202020] dark:text-white">
+                            Gallery
+                        </p>
+                    </div>
+                    <div className="flex justify-center items-center gap-[.3rem] bg-[#f8f8f8] dark:bg-[#202020] px-2 py-2 rounded-xl">
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-[1.2rem] text-[#202020] dark:text-white"
+                        >
+                            <path
+                                d="M8 1C5.23858 1 3 3.23858 3 6V7H4C4.55228 7 5 7.44772 5 8V11C5 11.5523 4.55228 12 4 12H3C2.44772 12 2 11.5523 2 11V6C2 2.68629 4.68629 0 8 0C11.3137 0 14 2.68629 14 6V12C14 13.3807 12.8807 14.5 11.5 14.5H9.36622C9.19331 14.7989 8.87014 15 8.5 15H7.5C6.94772 15 6.5 14.5523 6.5 14C6.5 13.4477 6.94772 13 7.5 13H8.5C8.87014 13 9.19331 13.2011 9.36622 13.5H11.5C12.3284 13.5 13 12.8284 13 12H12C11.4477 12 11 11.5523 11 11V8C11 7.44772 11.4477 7 12 7H13V6C13 3.23858 10.7614 1 8 1Z"
+                                fill="currentColor"
+                            />
+                        </svg>
+                        <p className="text-[.9rem] font-medium text-[#202020] dark:text-white">
+                            Support
+                        </p>
+                    </div>
+                    <div className="flex justify-center items-center gap-[.3rem] dark:bg-[#202020] bg-[#f8f8f8] px-2 py-2 rounded-xl">
+                        <svg
+                            width="16"
+                            height="16"
+                            viewBox="0 0 16 16"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-[1.2rem] text-[#202020] dark:text-white"
+                        >
+                            <path
+                                d="M8 16C9.10457 16 10 15.1046 10 14H6C6 15.1046 6.89543 16 8 16Z"
+                                fill="currentColor"
+                            />
+                            <path
+                                d="M8.99516 1.09903C8.99836 1.06646 9 1.03342 9 1C9 0.447715 8.55228 0 8 0C7.44772 0 7 0.447715 7 1C7 1.03342 7.00164 1.06646 7.00484 1.09904C4.7202 1.56045 3.00002 3.57934 3.00002 6C3.00002 7.0976 2.5 12 1 13H15C13.5 12 13 7.0976 13 6C13 3.57932 11.2798 1.56042 8.99516 1.09903Z"
+                                fill="currentColor"
+                            />
+                        </svg>
+                    </div>
+                    <div className="flex justify-center items-center gap-[.3rem] bg-[#f8f8f8] dark:bg-[#202020] px-2 py-2 rounded-xl">
+                        <Image
+                            src="/icons/cresent.svg"
+                            width={24}
+                            height={24}
+                            alt="dark mode toggle"
+                            className="cursor-pointer block dark:hidden w-[1.2rem]"
+                            onClick={toggleTheme}
+                        />
+                        <Image
+                            src="/icons/light.svg"
+                            width={24}
+                            height={24}
+                            alt="light mode toggle"
+                            className="cursor-pointer hidden dark:block w-[1.2rem]"
+                            onClick={toggleTheme}
+                        />
+                    </div>
+                </div>
+
+                {/* Mobile Menu Button - Visible only on mobile */}
+                <div className="ml-auto flex lg:hidden items-center gap-4">
+                    {/* Theme Toggle for Mobile */}
+                    <div className="flex justify-center items-center bg-[#f8f8f8] dark:bg-[#202020] px-2 py-2 rounded-xl">
+                        <Image
+                            src="/icons/cresent.svg"
+                            width={20}
+                            height={20}
+                            alt="dark mode toggle"
+                            className="cursor-pointer block dark:hidden w-[1.2rem]"
+                            onClick={toggleTheme}
+                        />
+                        <Image
+                            src="/icons/light.svg"
+                            width={20}
+                            height={20}
+                            alt="light mode toggle"
+                            className="cursor-pointer hidden dark:block w-[1.2rem]"
+                            onClick={toggleTheme}
+                        />
+                    </div>
+
+                    {/* Hamburger Menu Button */}
+                    <button
+                        onClick={() => setIsMenuOpen(!isMenuOpen)}
+                        className="flex flex-col justify-center items-center w-10 h-10 bg-[#f8f8f8] dark:bg-[#202020] rounded-xl cursor-pointer transition-all duration-300"
+                        aria-label="Toggle mobile menu"
+                    >
+                        <div
+                            className={`w-5 h-0.5 bg-[#202020] dark:bg-white transition-all duration-300 ${
+                                isMenuOpen ? "rotate-45 translate-y-1.5" : ""
+                            }`}
+                        ></div>
+                        <div
+                            className={`w-5 h-0.5 bg-[#202020] dark:bg-white my-1 transition-all duration-300 ${
+                                isMenuOpen ? "opacity-0" : ""
+                            }`}
+                        ></div>
+                        <div
+                            className={`w-5 h-0.5 bg-[#202020] dark:bg-white transition-all duration-300 ${
+                                isMenuOpen ? "-rotate-45 -translate-y-1.5" : ""
+                            }`}
+                        ></div>
+                    </button>
+                </div>
+            </nav>
+
+            {/* Mobile Menu Overlay */}
+            <div
+                className={`lg:hidden fixed inset-0 z-50 transition-all duration-300 ${
+                    isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+                }`}
+            >
+                {/* Backdrop */}
+                <div
+                    className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                    onClick={() => setIsMenuOpen(false)}
+                ></div>
+
+                {/* Menu Content */}
+                <div
+                    className={`absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-white dark:bg-[#1a1a1a] shadow-2xl transform transition-transform duration-300 ${
+                        isMenuOpen ? "translate-x-0" : "translate-x-full"
+                    }`}
+                >
+                    {/* Menu Header */}
+                    <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
+                        <div className="flex items-center gap-3">
+                            <Image
+                                src="/icons/logo.svg"
+                                width={24}
+                                height={24}
+                                alt="Company Logo"
+                                className="block dark:hidden"
+                            />
+                            <Image
+                                src="/icons/logo-light.svg"
+                                width={24}
+                                height={24}
+                                alt="Company Logo"
+                                className="hidden dark:block"
+                            />
+                            <span className="font-semibold text-[#202020] dark:text-white">
+                                Menu
+                            </span>
+                        </div>
+                        <button
+                            onClick={() => setIsMenuOpen(false)}
+                            className="w-8 h-8 flex items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800 text-[#202020] dark:text-white"
+                        >
+                            <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 16 16"
+                                fill="currentColor"
+                            >
+                                <path d="M12.854 3.146a.5.5 0 0 0-.708 0L8 7.293 3.854 3.146a.5.5 0 1 0-.708.708L7.293 8l-4.147 4.146a.5.5 0 0 0 .708.708L8 8.707l4.146 4.147a.5.5 0 0 0 .708-.708L8.707 8l4.147-4.146a.5.5 0 0 0 0-.708z" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    {/* Navigation Items */}
+                    <div className="p-6 space-y-4">
+                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            Navigation
+                        </h3>
+                        <ul className="space-y-2">
+                            {navItems.map((item, index) => (
+                                <li key={item.id}>
+                                    <button
+                                        onClick={() => {
+                                            setActiveIndex(index);
+                                            setIsMenuOpen(false);
+                                        }}
+                                        className={`w-full flex items-center gap-4 px-4 py-3 rounded-xl transition-all duration-200 text-left ${
+                                            activeIndex === index
+                                                ? "bg-[#f5f5f5] dark:bg-[#202020] text-[#202020] dark:text-white"
+                                                : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-300"
+                                        }`}
+                                    >
+                                        <div
+                                            className={`transition-colors duration-200 ${
+                                                activeIndex === index
+                                                    ? "text-[#202020] dark:text-white"
+                                                    : "text-gray-500 dark:text-gray-400"
+                                            }`}
+                                        >
+                                            {item.icon}
+                                        </div>
+                                        <span className="font-medium">
+                                            {item.name}
+                                        </span>
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Action Items */}
+                    <div className="p-6 border-t border-gray-200 dark:border-gray-700 space-y-4">
+                        <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                            Quick Actions
+                        </h3>
+
+                        {/* Gallery Action */}
+                        <button className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 text-left">
+                            <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="text-gray-500 dark:text-gray-400"
+                            >
+                                <path
+                                    fillRule="evenodd"
+                                    clipRule="evenodd"
+                                    d="M10.4763 9.85043C10.4763 10.8104 9.69763 11.589 8.73768 11.589C7.77772 11.589 7 10.8104 7 9.85043C7 8.89049 7.77772 8.11182 8.73768 8.11182C9.69763 8.11182 10.4754 8.88955 10.4763 9.84856V9.85043Z"
+                                    fill="currentColor"
+                                />
+                                <rect
+                                    x="2.75"
+                                    y="3.86182"
+                                    width="18.5"
+                                    height="16.5"
+                                    rx="3.25"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                />
+                                <path
+                                    d="M15.758 13.1118C17.5271 13.1118 19.1544 14.6938 20 15.4766V19.1118H4C4 19.1118 5.29914 17.0464 6.6586 16.0349C8.01806 15.0235 9.56678 16.6015 11.2673 16.6015C12.9687 16.6015 13.9898 13.1118 15.758 13.1118Z"
+                                    fill="currentColor"
+                                    stroke="currentColor"
+                                    strokeWidth="1.5"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                />
+                            </svg>
+                            <span className="font-medium text-gray-700 dark:text-gray-300">
+                                Gallery
+                            </span>
+                        </button>
+
+                        {/* Support Action */}
+                        <button className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 text-left">
+                            <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 16 16"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="text-gray-500 dark:text-gray-400"
+                            >
+                                <path
+                                    d="M8 1C5.23858 1 3 3.23858 3 6V7H4C4.55228 7 5 7.44772 5 8V11C5 11.5523 4.55228 12 4 12H3C2.44772 12 2 11.5523 2 11V6C2 2.68629 4.68629 0 8 0C11.3137 0 14 2.68629 14 6V12C14 13.3807 12.8807 14.5 11.5 14.5H9.36622C9.19331 14.7989 8.87014 15 8.5 15H7.5C6.94772 15 6.5 14.5523 6.5 14C6.5 13.4477 6.94772 13 7.5 13H8.5C8.87014 13 9.19331 13.2011 9.36622 13.5H11.5C12.3284 13.5 13 12.8284 13 12H12C11.4477 12 11 11.5523 11 11V8C11 7.44772 11.4477 7 12 7H13V6C13 3.23858 10.7614 1 8 1Z"
+                                    fill="currentColor"
+                                />
+                            </svg>
+                            <span className="font-medium text-gray-700 dark:text-gray-300">
+                                Support
+                            </span>
+                        </button>
+
+                        {/* Notifications Action */}
+                        <button className="w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 text-left">
+                            <svg
+                                width="20"
+                                height="20"
+                                viewBox="0 0 16 16"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                                className="text-gray-500 dark:text-gray-400"
+                            >
+                                <path
+                                    d="M8 16C9.10457 16 10 15.1046 10 14H6C6 15.1046 6.89543 16 8 16Z"
+                                    fill="currentColor"
+                                />
+                                <path
+                                    d="M8.99516 1.09903C8.99836 1.06646 9 1.03342 9 1C9 0.447715 8.55228 0 8 0C7.44772 0 7 0.447715 7 1C7 1.03342 7.00164 1.06646 7.00484 1.09904C4.7202 1.56045 3.00002 3.57934 3.00002 6C3.00002 7.0976 2.5 12 1 13H15C13.5 12 13 7.0976 13 6C13 3.57932 11.2798 1.56042 8.99516 1.09903Z"
+                                    fill="currentColor"
+                                />
+                            </svg>
+                            <span className="font-medium text-gray-700 dark:text-gray-300">
+                                Notifications
+                            </span>
+                        </button>
+                    </div>
+                </div>
             </div>
-        </nav>
+        </>
     );
 }
